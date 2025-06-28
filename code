@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnHub - Interactive Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse { animation: pulse 2s infinite; }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.8s ease;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-12">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-white">LearnHub</h1>
+            </div>
+            <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 dark:text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path id="theme-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Navigation -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="relative w-32 h-32">
+                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                <path class="text-gray-200 dark:text-gray-700" d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2"></path>
+                                <path id="overall-progress" class="text-indigo-600" d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="100, 100" stroke-dashoffset="40"></path>
+                                <text x="18" y="20.35" class="text-[0.5em] font-bold text-center fill-current text-gray-800 dark:text-white" text-anchor="middle">65%</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-xl font-semibold text-center text-gray-800 dark:text-white mb-2">Welcome back!</h2>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-4">Keep up the great learning momentum.</p>
+                    
+                    <div class="space-y-4">
+                        <button id="courses-tab" class="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-indigo-100 dark:bg-gray-700 text-indigo-700 dark:text-white font-medium">
+                            <span>My Courses</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                        </button>
+                        <button id="quiz-tab" class="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium">
+                            <span>Quizzes</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <button id="progress-tab" class="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium">
+                            <span>Progress</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Recent Activity</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="h-8 w-8 rounded-full bg-indigo-100 dark:bg-gray-700 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">Completed JavaScript Fundamentals</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">2 hours ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="h-8 w-8 rounded-full bg-green-100 dark:bg-gray-700 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">Scored 85% on React Quiz</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Yesterday</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="h-8 w-8 rounded-full bg-blue-100 dark:bg-gray-700 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">Started Advanced CSS Course</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">2 days ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                <!-- Courses Section (Default View) -->
+                <div id="courses-content" class="space-y-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">My Courses</h2>
+                        <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors">
+                            Add New Course
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Course Card 1 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                            <div class="relative h-40">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/733db925-dcf1-48eb-8ab9-132e041b1121.png" alt="Modern web development with JavaScript course cover showing clean code examples" class="w-full h-full object-cover" />
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent h-20"></div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="px-3 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-full">In Progress</span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">JavaScript Fundamentals</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Master the core concepts of modern JavaScript development.</p>
+                                
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-1">
+                                        <span>Progress</span>
+                                        <span>75%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm">Continue</button>
+                                    <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-medium text-sm">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course Card 2 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                            <div class="relative h-40">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f4c05fe2-7864-4aee-9eb3-f4ccce4c5bab.png" alt="React framework course illustration with component tree visualization and hooks examples" class="w-full h-full object-cover" />
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent h-20"></div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded-full">Available</span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">React Masterclass</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Build modern web applications with React, hooks, and context API.</p>
+                                
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-1">
+                                        <span>Progress</span>
+                                        <span>0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm">Start</button>
+                                    <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-medium text-sm">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course Card 3 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                            <div class="relative h-40">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d9b1fa32-844a-4b52-9367-180976c6ff1f.png" alt="Advanced CSS techniques course banner with stunning visual effects examples" class="w-full h-full object-cover" />
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent h-20"></div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="px-3 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-full">In Progress</span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Advanced CSS Techniques</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Learn cutting-edge CSS features to create stunning web designs.</p>
+                                
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-1">
+                                        <span>Progress</span>
+                                        <span>45%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm">Continue</button>
+                                    <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-medium text-sm">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course Card 4 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                            <div class="relative h-40">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e70c59ff-b0b8-47e8-a826-13e014388918.png" alt="Node.js backend development course cover showing server architecture diagram" class="w-full h-full object-cover" />
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent h-20"></div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="px-3 py-1 bg-yellow-500 text-white text-xs font-semibold rounded-full">Completed</span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Node.js Backend Development</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Build scalable server-side applications with Node.js and Express.</p>
+                                
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-1">
+                                        <span>Progress</span>
+                                        <span>100%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between">
+                                    <button class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 font-medium text-sm">Review</button>
+                                    <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-medium text-sm">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quizzes Section (Hidden by Default) -->
+                <div id="quiz-content" class="hidden space-y-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Available Quizzes</h2>
+                        <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors">
+                            Create New Quiz
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Quiz Card 1 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">JavaScript Basics</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 text-sm">15 questions • 30 minutes</p>
+                                    </div>
+                                    <span class="px-3 py-1 bg-blue-100 dark:bg-gray-700 text-blue-800 dark:text-blue-300 text-xs font-semibold rounded-full">Core</span>
+                                </div>
+                                
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Test your understanding of JavaScript fundamentals including variables, functions, and scope.</p>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">Last score: 85%</span>
+                                    </div>
+                                    <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors">
+                                        Start Quiz
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quiz Card 2 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">React Hooks</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 text-sm">20 questions • 45 minutes</p>
+                                    </div>
+                                    <span class="px-3 py-1 bg-purple-100 dark:bg-gray-700 text-purple-800 dark:text-purple-300 text-xs font-semibold rounded-full">Advanced</span>
+                                </div>
+                                
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Challenge your knowledge of React hooks including useState, useEffect, and useContext.</p>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">Last score: Not taken</span>
+                                    </div>
+                                    <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors">
+                                        Start Quiz
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quiz Card 3 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">CSS Grid</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 text-sm">12 questions • 25 minutes</p>
+                                    </div>
+                                    <span class="px-3 py-1 bg-green-100 dark:bg-gray-700 text-green-800 dark:text-green-300 text-xs font-semibold rounded-full">Intermediate</span>
+                                </div>
+                                
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Test your CSS Grid layout skills with practical scenarios and challenges.</p>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">Last score: 72%</span>
+                                    </div>
+                                    <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors">
+                                        Start Quiz
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Active Quiz Example -->
+                    <div id="active-quiz" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden p-6">
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">JavaScript Basics - Question 5 of 15</h3>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
+                                <div class="bg-indigo-600 h-2 rounded-full" style="width: 33%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <p class="text-lg text-gray-800 dark:text-white mb-4">What will be the output of the following code snippet?</p>
+                            <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg font-mono text-sm text-gray-800 dark:text-gray-200 mb-6">
+                                <pre>let x = 5;<br/>let y = "5";<br/>console.log(x == y);</pre>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <button class="w-full text-left px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors">
+                                    true
+                                </button>
+                                <button class="w-full text-left px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors">
+                                    false
+                                </button>
+                                <button class="w-full text-left px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors">
+                                    undefined
+                                </button>
+                                <button class="w-full text-left px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors">
+                                    Error
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium">
+                                Previous
+                            </button>
+                            <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
+                                Skip
+                            </button>
+                            <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Section (Hidden by Default) -->
+                <div id="progress-content" class="hidden space-y-6">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Learning Progress</h2>
+                        <p class="text-gray-600 dark:text-gray-300">Track your completion and performance across all courses</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Overall Progress -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Overall Completion</h3>
+                            <div class="flex justify-center">
+                                <div class="relative w-40 h-40">
+                                    <svg class="w-full h-full" viewBox="0 0 36 36">
+                                        <path class="text-gray-200 dark:text-gray-700" d="M18 2.0845
+                                            a 15.9155 15.9155 0 0 1 0 31.831
+                                            a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2"></path>
+                                        <path class="text-indigo-600" d="M18 2.0845
+                                            a 15.9155 15.9155 0 0 1 0 31.831
+                                            a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="100, 100" stroke-dashoffset="35"></path>
+                                        <text x="18" y="20.35" class="text-[0.5em] font-bold text-center fill-current text-gray-800 dark:text-white" text-anchor="middle">65%</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course Breakdown -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Courses Breakdown</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-1">
+                                        <span>JavaScript Fundamentals</span>
+                                        <span>75%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-1">
+                                        <span>Advanced CSS Techniques</span>
+                                        <span>45%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-1">
+                                        <span>Node.js Backend Development</span>
+                                        <span>100%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-1">
+                                        <span>React Masterclass</span>
+                                        <span>0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                        <div class="bg-gray-400 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiz Performance -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6">Quiz Performance</h3>
+                        <div class="h-64">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/08ef352b-7641-4097-a7ae-709033aea579.png" alt="Graph showing quiz performance trends with historical scores and improvement markers" class="w-full h-full object-contain" />
+                        </div>
+                    </div>
+                    
+                    <!-- Time Spent -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Weekly Time -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6">Weekly Learning Time</h3>
+                            <div class="h-48">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/12f1b8e0-3370-4b09-af8f-b831ab8828ca.png" alt="Bar chart showing daily learning hours distribution across the week" class="w-full h-full object-contain" />
+                            </div>
+                        </div>
+                        
+                        <!-- Course Time -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-6">Time by Course</h3>
+                            <div class="h-48">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5192864a-b260-4534-b73b-f678f2e60813.png" alt="Pie chart visualizing time allocation across different courses" class="w-full h-full object-contain" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themePath = document.getElementById('theme-path');
+        
+        // Check for saved theme preference or use system preference
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+            document.body.classList.add('dark');
+            themePath.setAttribute('d', 'M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            
+            if (isDark) {
+                themePath.setAttribute('d', 'M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themePath.setAttribute('d', 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Tab navigation functionality
+        const coursesTab = document.getElementById('courses-tab');
+        const quizTab = document.getElementById('quiz-tab');
+        const progressTab = document.getElementById('progress-tab');
+        
+        const coursesContent = document.getElementById('courses-content');
+        const quizContent = document.getElementById('quiz-content');
+        const progressContent = document.getElementById('progress-content');
+        
+        coursesTab.addEventListener('click', () => {
+            coursesContent.classList.remove('hidden');
+            quizContent.classList.add('hidden');
+            progressContent.classList.add('hidden');
+            
+            coursesTab.classList.add('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+            quizTab.classList.remove('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+            progressTab.classList.remove('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+        });
+        
+        quizTab.addEventListener('click', () => {
+            coursesContent.classList.add('hidden');
+            quizContent.classList.remove('hidden');
+            progressContent.classList.add('hidden');
+            
+            coursesTab.classList.remove('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+            quizTab.classList.add('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+            progressTab.classList.remove('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+        });
+        
+        progressTab.addEventListener('click', () => {
+            coursesContent.classList.add('hidden');
+            quizContent.classList.add('hidden');
+            progressContent.classList.remove('hidden');
+            
+            coursesTab.classList.remove('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+            quizTab.classList.remove('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+            progressTab.classList.add('bg-indigo-100', 'dark:bg-gray-700', 'text-indigo-700', 'dark:text-white');
+        });
+        
+        // Quiz functionality
+        const quizCards = document.querySelectorAll('#quiz-content > div > div > div');
+        quizCards.forEach(card => {
+            const button = card.querySelector('button');
+            button.addEventListener('click', () => {
+                document.querySelector('#quiz-content > div:nth-child(2)').classList.add('hidden');
+                document.getElementById('active-quiz').classList.remove('hidden');
+            });
+        });
+        
+        // Initialize course percentages
+        setTimeout(() => {
+            document.getElementById('overall-progress').style.strokeDashoffset = '40';
+        }, 500);
+    </script>
+</body>
+</html>
